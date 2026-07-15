@@ -60,16 +60,15 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQuery}
+                onQueryChange={setQuery}
                 status={filterStatus}
-                setStatus={setFilterStatus}
+                onStatusChange={setFilterStatus}
               />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
 
-              {/* Важливо! Передаємо ТІЛЬКИ visibleTodos, а не всі todos */}
               <TodoList
                 todos={visibleTodos}
                 onSelectTodo={setSelectedTodo}

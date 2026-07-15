@@ -2,56 +2,70 @@ import React from 'react';
 
 type Props = {
   query: string;
-  setQuery: (query: string) => void;
+  onQueryChange: (query: string) => void;
   status: string;
-  setStatus: (status: string) => void;
+  onStatusChange: (status: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  setQuery,
+  onQueryChange,
   status,
-  setStatus,
-}) => (
-  <form className="field has-addons" onSubmit={e => e.preventDefault()}>
-    <p className="control">
-      <span className="select">
-        <select
-          data-cy="statusSelect"
-          value={status}
-          onChange={e => setStatus(e.target.value)}
-        >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+  onStatusChange,
+}) => {
+  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onStatusChange(event.target.value);
+  };
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onQueryChange(event.target.value);
+  };
 
-      {query.length > 0 && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => setQuery('')}
-          />
+  const handleClear = () => {
+    onQueryChange('');
+    onStatusChange('all');
+  };
+
+  return (
+    <form className="field has-addons" onSubmit={e => e.preventDefault()}>
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={status}
+            onChange={handleStatusChange}
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
         </span>
-      )}
-    </p>
-  </form>
-);
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={query}
+          onChange={handleQueryChange}
+        />
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {query.length > 0 && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleClear}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
